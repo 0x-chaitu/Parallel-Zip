@@ -1,9 +1,18 @@
 #include "fileHandler.h"
+#include <unistd.h>
 
-void openFiles(int argc, char ** argv)
+
+long chunks = 0;
+long pageSize = 0;
+
+file *openFiles(int argc, char ** argv)
 {
     file *files;
+
+
     files = malloc(sizeof(file) * (argc-1));
+    pageSize = sysconf(_SC_PAGE_SIZE);
+
     if (files == NULL) {
         handle_error("Err: ");
     }
@@ -19,8 +28,15 @@ void openFiles(int argc, char ** argv)
         };
         files[i-1].fp = fd;
         files[i-1].size = sd.st_size; 
-        close(fd);
-
+        chunks += (sd.st_size/pageSize) + 1 ;
     }
+    return files;
+}
 
+long getChunks(){
+    return chunks;
+}
+
+long getPageSize(){
+    return pageSize;
 }

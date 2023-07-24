@@ -12,15 +12,19 @@
 
 
 #define handle_error(msg) do {exit(EXIT_FAILURE);} while (0)
+extern long chunks;
+extern long pageSize;
 
 typedef struct file
 {
-    FILE *fp;
+    int fp;
     off_t size;
 } file;
 
 
-void openFiles(int argc, char **argv);
+file *openFiles(int argc, char **argv);
+long getChunks();
+long getPageSize();
     
 
 
